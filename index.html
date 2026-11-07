@@ -32,7 +32,11 @@
       overflow-x: hidden;
     }
 
-    /* Sidebar */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
     .sidebar {
       width: var(--sidebar-width);
       background: var(--bg);
@@ -45,10 +49,6 @@
       overflow-y: auto;
       z-index: 100;
       transition: transform 0.25s ease;
-    }
-
-    .sidebar.hidden {
-      transform: translateX(-100%);
     }
 
     .logo {
@@ -99,7 +99,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Main content */
     .main {
       margin-left: var(--sidebar-width);
       flex: 1;
@@ -107,11 +106,6 @@
       transition: margin-left 0.25s ease;
     }
 
-    .main.full {
-      margin-left: 0;
-    }
-
-    /* Top bar */
     .topbar {
       position: sticky;
       top: 0;
@@ -188,28 +182,20 @@
       cursor: pointer;
       border: none;
       transition: background 0.15s;
+      display: inline-block;
     }
 
     .btn-outline {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--accent);
+      text-decoration: none;
     }
 
     .btn-outline:hover {
       background: rgba(62, 166, 255, 0.1);
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .btn-primary:hover {
-      background: #65b8ff;
-    }
-
-    /* Content */
     .content {
       padding: 24px;
     }
@@ -236,6 +222,9 @@
     .video-card {
       cursor: pointer;
       transition: transform 0.15s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
 
     .video-card:hover {
@@ -318,7 +307,6 @@
       line-height: 1.4;
     }
 
-    /* Categories chips */
     .chips {
       display: flex;
       gap: 10px;
@@ -352,44 +340,6 @@
       border-color: var(--text);
     }
 
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .video-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        margin-left: 0;
-      }
-
-      .menu-btn {
-        display: block;
-      }
-
-      .video-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .content {
-        padding: 16px;
-      }
-
-      .search-container {
-        max-width: none;
-      }
-    }
-
-    /* Overlay for mobile sidebar */
     .overlay {
       display: none;
       position: fixed;
@@ -401,26 +351,54 @@
     .overlay.show {
       display: block;
     }
+
+    @media (max-width: 1200px) {
+      .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+      }
+      .menu-btn {
+        display: block;
+      }
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      .content {
+        padding: 16px;
+      }
+      .search-container {
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Mobile overlay -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-    <div class="logo">
+    <a href="index.html" class="logo">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <path d="M4 6h16v12H4z" fill="#3ea6ff"/>
         <path d="M10 9l5 3-5 3V9z" fill="#0f0f0f"/>
       </svg>
       Spoof<span>Stream</span>
-    </div>
+    </a>
 
-    <div class="nav-item active">
+    <a href="index.html" class="nav-item active">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       Home
-    </div>
+    </a>
     <div class="nav-item">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.26 1.99-2.6 3.44-.32 1.46.06 2.96 1.04 4.11l1.2.5-1.44.75c-1.84.96-2.53 3.23-1.56 5.06s3.24 2.53 5.07 1.56l8.5-4.42c1.29-.68 2.26-1.99 2.6-3.44.32-1.46-.06-2.96-1.04-4.11z"/></svg>
       Shorts
@@ -455,9 +433,7 @@
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main" id="main">
-    <!-- Topbar -->
     <header class="topbar">
       <button class="menu-btn" id="menuBtn">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
@@ -471,13 +447,11 @@
       </div>
 
       <div class="top-actions">
-<a href="auth.html" class="btn btn-outline" style="text-decoration: none; display: inline-block;">Sign In</a>
+        <a href="auth.html" class="btn btn-outline">Sign In</a>
       </div>
     </header>
 
-    <!-- Content -->
     <div class="content">
-      <!-- Category chips -->
       <div class="chips">
         <div class="chip active">All</div>
         <div class="chip">The Office</div>
@@ -490,14 +464,12 @@
         <div class="chip">New</div>
       </div>
 
-      <!-- Trending Section -->
       <div class="section-header">
         <h2>Trending Parodies</h2>
       </div>
 
       <div class="video-grid">
-        <!-- Video 1 -->
-        <div class="video-card">
+        <a href="watch.html?v=office1" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office1/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -510,10 +482,9 @@
               <p>TBC_on_X · 1.9M views · 2 hours ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Video 2 -->
-        <div class="video-card">
+        <a href="watch.html?v=office2" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office2/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -526,10 +497,9 @@
               <p>AI Office Labs · 482K views · 5 hours ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Video 3 -->
-        <div class="video-card">
+        <a href="watch.html?v=friends1" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/friends1/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -542,10 +512,9 @@
               <p>SpoofCentral · 310K views · 1 day ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Video 4 -->
-        <div class="video-card">
+        <a href="watch.html?v=breaking" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/breaking/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -558,10 +527,9 @@
               <p>RemakeFactory · 890K views · 2 days ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Video 5 -->
-        <div class="video-card">
+        <a href="watch.html?v=seinfeld" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/seinfeld/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -574,10 +542,9 @@
               <p>ClassicSpoofs · 215K views · 3 days ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Video 6 -->
-        <div class="video-card">
+        <a href="watch.html?v=office3" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office3/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -590,16 +557,15 @@
               <p>SchruteFarmsAI · 1.1M views · 4 days ago</p>
             </div>
           </div>
-        </div>
+        </a>
       </div>
 
-      <!-- More section -->
       <div class="section-header">
         <h2>Recommended for You</h2>
       </div>
 
       <div class="video-grid">
-        <div class="video-card">
+        <a href="watch.html?v=parks" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/parks/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -612,9 +578,9 @@
               <p>LeslieAI · 167K views · 6 hours ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="video-card">
+        <a href="watch.html?v=simpsons" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/simpsons/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -627,9 +593,9 @@
               <p>SpringfieldSpoofs · 542K views · 1 day ago</p>
             </div>
           </div>
-        </div>
+        </a>
 
-        <div class="video-card">
+        <a href="watch.html?v=office4" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office4/640/360" alt="thumbnail" />
             <div class="ai-badge">AI PARODY</div>
@@ -642,7 +608,7 @@
               <p>BeeslyBots · 298K views · 2 days ago</p>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -651,7 +617,6 @@
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-    const main = document.getElementById('main');
 
     menuBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
@@ -663,7 +628,6 @@
       overlay.classList.remove('show');
     });
 
-    // Simple chip active state
     document.querySelectorAll('.chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
