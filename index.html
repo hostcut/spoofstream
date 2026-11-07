@@ -84,7 +84,7 @@
     .top-actions { display: flex; align-items: center; gap: 12px; }
     .btn {
       padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;
-      cursor: pointer; border: none; transition: background 0.15s; display: inline-block;
+      cursor: pointer; border: none; display: inline-block;
     }
     .btn-outline {
       background: transparent; border: 1px solid var(--border); color: var(--accent);
@@ -102,20 +102,12 @@
       gap: 20px 16px;
       margin-bottom: 40px;
     }
-    .video-card {
-      display: block;
-      cursor: pointer;
-      transition: transform 0.15s;
-    }
+    .video-card { display: block; cursor: pointer; transition: transform 0.15s; }
     .video-card:hover { transform: translateY(-2px); }
     .thumbnail {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: var(--bg-secondary);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 10px;
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      background: var(--bg-secondary); border-radius: 12px;
+      overflow: hidden; margin-bottom: 10px;
     }
     .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
     .duration {
@@ -189,10 +181,10 @@
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       Home
     </a>
-    <div class="nav-item">
+    <a href="shorts.html" class="nav-item">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.26 1.99-2.6 3.44-.32 1.46.06 2.96 1.04 4.11l1.2.5-1.44.75c-1.84.96-2.53 3.23-1.56 5.06s3.24 2.53 5.07 1.56l8.5-4.42c1.29-.68 2.26-1.99 2.6-3.44.32-1.46-.06-2.96-1.04-4.11z"/></svg>
       Shorts
-    </div>
+    </a>
     <div class="nav-item">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 18v-6l5 3-5 3zm7-15H7v2h10V3zm2 4H5v12h14V7zm-7 2v6l5-3-5-3z"/></svg>
       Subscriptions
@@ -228,14 +220,12 @@
       <button class="menu-btn" id="menuBtn">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
       </button>
-
       <form class="search-container" action="search.html" method="get">
         <input type="text" name="q" class="search-input" placeholder="Search AI parodies..." />
         <button type="submit" class="search-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </button>
       </form>
-
       <div class="top-actions">
         <a href="auth.html" class="btn btn-outline">Sign In</a>
       </div>
@@ -251,7 +241,7 @@
         <a href="search.html?q=anime" class="chip">Anime</a>
         <a href="search.html?q=horror" class="chip">Horror</a>
         <a href="search.html?q=reality" class="chip">Reality TV</a>
-        <a href="search.html?q=new" class="chip">New</a>
+        <a href="shorts.html" class="chip">Shorts</a>
       </div>
 
       <div class="section-header">
@@ -273,7 +263,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=office2" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office2/640/360" alt="thumbnail" />
@@ -288,7 +277,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=friends1" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/friends1/640/360" alt="thumbnail" />
@@ -303,7 +291,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=breaking" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/breaking/640/360" alt="thumbnail" />
@@ -318,7 +305,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=seinfeld" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/seinfeld/640/360" alt="thumbnail" />
@@ -333,7 +319,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=office3" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office3/640/360" alt="thumbnail" />
@@ -353,7 +338,6 @@
       <div class="section-header">
         <h2>Recommended for You</h2>
       </div>
-
       <div class="video-grid">
         <a href="watch.html?v=parks" class="video-card">
           <div class="thumbnail">
@@ -369,7 +353,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=simpsons" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/simpsons/640/360" alt="thumbnail" />
@@ -384,7 +367,6 @@
             </div>
           </div>
         </a>
-
         <a href="watch.html?v=office4" class="video-card">
           <div class="thumbnail">
             <img src="https://picsum.photos/seed/office4/640/360" alt="thumbnail" />
@@ -407,7 +389,6 @@
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-
     menuBtn.addEventListener('click', () => {
       sidebar.classList.toggle('open');
       overlay.classList.toggle('show');
