@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload – SpoofStream</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --bg-secondary: #212121;
+      --bg-hover: #3f3f3f;
+      --text: #f1f1f1;
+      --text-secondary: #aaaaaa;
+      --accent: #3ea6ff;
+      --red: #ff4e45;
+      --border: #303030;
+      --sidebar-width: 240px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      padding: 12px;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.25s ease;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 12px 20px;
+      font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+    .nav-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; font-weight: 500;
+      transition: background 0.15s; margin-bottom: 2px; cursor: pointer;
+    }
+    .nav-item:hover, .nav-item.active { background: var(--bg-hover); }
+    .nav-item svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .section-title {
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      padding: 16px 12px 8px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .main { margin-left: var(--sidebar-width); flex: 1; min-height: 100vh; }
+    .topbar {
+      position: sticky; top: 0; background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      z-index: 50;
+    }
+    .menu-btn {
+      display: none; background: none; border: none; color: var(--text);
+      cursor: pointer; padding: 8px; border-radius: 50%;
+    }
+    .menu-btn:hover { background: var(--bg-hover); }
+    .search-container { flex: 1; max-width: 640px; display: flex; }
+    .search-input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border);
+      border-right: none; border-radius: 40px 0 0 40px;
+      padding: 10px 18px; color: var(--text); font-size: 16px; outline: none;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-btn {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 0 40px 40px 0; padding: 0 22px; cursor: pointer; color: var(--text);
+    }
+    .search-btn:hover { background: var(--bg-hover); }
+    .btn {
+      padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;
+      cursor: pointer; border: none; transition: background 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-outline {
+      background: transparent; border: 1px solid var(--border); color: var(--accent);
+    }
+    .btn-outline:hover { background: rgba(62, 166, 255, 0.1); }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { background: #65b8ff; }
+    .btn-secondary {
+      background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text);
+    }
+    .btn-secondary:hover { background: var(--bg-hover); }
+    .content { padding: 24px; max-width: 900px; }
+    .page-title { font-size: 22px; font-weight: 600; margin-bottom: 24px; }
+    .upload-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 24px;
+    }
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: rgba(62, 166, 255, 0.05);
+    }
+    .dropzone svg { width: 48px; height: 48px; color: var(--text-secondary); margin-bottom: 12px; }
+    .dropzone h3 { font-size: 16px; margin-bottom: 6px; }
+    .dropzone p { font-size: 13px; color: var(--text-secondary); }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 500;
+      color: var(--text-secondary); margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+    .file-name {
+      font-size: 13px; color: var(--accent); margin-top: 10px; display: none;
+    }
+    .file-name.show { display: block; }
+    .success-banner {
+      display: none;
+      background: rgba(62, 166, 255, 0.12);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .success-banner.show { display: block; }
+    .overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 90;
+    }
+    .overlay.show { display: block; }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .menu-btn { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M4 6h16v12H4z" fill="#3ea6ff"/>
+        <path d="M10 9l5 3-5 3V9z" fill="#0f0f0f"/>
+      </svg>
+      Spoof<span>Stream</span>
+    </a>
+    <a href="index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </a>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.26 1.99-2.6 3.44-.32 1.46.06 2.96 1.04 4.11l1.2.5-1.44.75c-1.84.96-2.53 3.23-1.56 5.06s3.24 2.53 5.07 1.56l8.5-4.42c1.29-.68 2.26-1.99 2.6-3.44.32-1.46-.06-2.96-1.04-4.11z"/></svg>
+      Shorts
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 18v-6l5 3-5 3zm7-15H7v2h10V3zm2 4H5v12h14V7zm-7 2v6l5-3-5-3z"/></svg>
+      Subscriptions
+    </div>
+    <div class="section-title">Library</div>
+    <a href="upload.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
+      Your Uploads
+    </a>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <form class="search-container" action="search.html" method="get">
+        <input type="text" name="q" class="search-input" placeholder="Search AI parodies..." />
+        <button type="submit" class="search-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </button>
+      </form>
+      <div class="top-actions">
+        <a href="auth.html" class="btn btn-outline">Sign In</a>
+      </div>
+    </header>
+
+    <div class="content">
+      <h1 class="page-title">Upload AI Parody</h1>
+
+      <div class="success-banner" id="successBanner">
+        Upload queued (demo). Your video would appear on your channel after processing.
+        <a href="channel.html?c=you" style="color:var(--accent);margin-left:8px;">View channel →</a>
+      </div>
+
+      <div class="upload-card">
+        <div class="dropzone" id="dropzone">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+          <h3>Drag and drop video file</h3>
+          <p>or click to browse · MP4, WebM, MOV · max 2GB (demo)</p>
+          <p class="file-name" id="fileName"></p>
+          <input type="file" id="fileInput" accept="video/*" hidden />
+        </div>
+
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="e.g. Michael Scott Explains Quantum Computing" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Tell viewers about this AI parody..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category">
+              <option>The Office</option>
+              <option>Sitcoms</option>
+              <option>Movies</option>
+              <option>Political</option>
+              <option>Anime</option>
+              <option>Horror</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="visibility">Visibility</label>
+            <select id="visibility">
+              <option>Public</option>
+              <option>Unlisted</option>
+              <option>Private</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tags">Tags (comma separated)</label>
+          <input type="text" id="tags" placeholder="office, ai, parody, comedy" />
+        </div>
+
+        <div class="actions">
+          <a href="index.html" class="btn btn-secondary">Cancel</a>
+          <button class="btn btn-primary" id="publishBtn">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) {
+        fileName.textContent = e.dataTransfer.files[0].name;
+        fileName.classList.add('show');
+      }
+    });
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) {
+        fileName.textContent = fileInput.files[0].name;
+        fileName.classList.add('show');
+      }
+    });
+
+    document.getElementById('publishBtn').addEventListener('click', () => {
+      document.getElementById('successBanner').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
