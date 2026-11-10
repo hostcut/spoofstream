@@ -7,12 +7,12 @@
   <style>
     :root {
       --bg: #0f0f0f;
-      --text: #f1f1f11;
-      --text-secondary: #aaaaaa;
+      --text: #f1f1f1;
+      --muted: #aaaaaa;
       --accent: #3ea6ff;
       --border: #303030;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
@@ -21,51 +21,92 @@
       max-width: 960px;
       margin: 0 auto;
     }
-    a { color: var(--accent); }
+    a { color: var(--accent); text-decoration: none; }
     .back { display: inline-block; margin-bottom: 16px; font-size: 14px; }
-    video {
+    .player-wrap {
+      position: relative;
       width: 100%;
-      max-height: 70vh;
       background: #000;
       border-radius: 12px;
+      overflow: hidden;
     }
+    video { width: 100%; max-height: 70vh; display: block; background: #000; }
     h1 { font-size: 20px; margin: 16px 0 8px; }
-    p { color: var(--text-secondary); font-size: 14px; }
-    .err { color: #ff4e45; margin-top: 24px; }
+    p { color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .err { color: #ff4e45; margin-top: 12px; }
+    .debug {
+      margin-top: 16px; padding: 12px;
+      background: #212121; border-radius: 8px;
+      font-size: 12px; color: var(--muted);
+      word-break: break-all;
+    }
   </style>
 </head>
 <body>
-  <a class="back" href="index.html">← Home</a>
-  <div id="player"></div>
+  <a class="back" href="/">← Home</a>
+  <div id="app">
+    <p>Loading…</p>
+  </div>
 
   <script>
     const id = new URLSearchParams(location.search).get("v");
+    const app = document.getElementById("app");
 
-    async function load() {
-      const root = document.getElementById("player");
-      if (!id) {
-        root.innerHTML = '<p class="err">Missing video id.</p>';
-        return;
-      }
-
-      const res = await fetch("/api/videos");
-      const data = await res.json();
-      const video = (data.videos || []).find((v) => v.id === id);
-
-      if (!video) {
-        root.innerHTML = '<p class="err">Video not found in R2.</p>';
-        return;
-      }
-
-      document.title = video.title + " – SpoofStream";
-      root.innerHTML = `
-        <video controls autoplay playsinline src="${video.url}"></video>
-        <h1>${video.title}</h1>
-        <p>AI-generated or user-uploaded parody · served from R2</p>
-      `;
+    function titleFromId(id) {
+      return (id || "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
     }
 
-    load();
+    async function main() {
+      if (!id) {
+        app.innerHTML = '<p class="err">Missing video id. Open a video from Home.</p>';
+        return;
+      }
+
+      // Prefer API metadata; always fall back to known R2 path
+      let title = titleFromId(id);
+      let src = "/media/videos/" + encodeURIComponent(id) + ".mp4";
+
+      try {
+        const res = await fetch("/api/videos");
+        if (res.ok) {
+          const data = await res.json();
+          const hit = (data.videos || []).find((v) => v.id === id);
+          if (hit) {
+            title = hit.title || title;
+            src = hit.url || src;
+          }
+        }
+      } catch {
+        /* use fallback src */
+      }
+
+      document.title = title + " – SpoofStream";
+      app.innerHTML = `
+        <div class="player-wrap">
+          <video id="vid" controls playsinline preload="metadata" src="${src}"></video>
+        </div>
+        <h1>${title}</h1>
+        <p>AI parody · served from R2</p>
+        <div class="debug">
+          Video src: <a href="${src}" target="_blank" rel="noopener">${src}</a>
+          <div id="vidStatus"></div>
+        </div>
+      `;
+
+      const vid = document.getElementById("vid");
+      const vidStatus = document.getElementById("vidStatus");
+      vid.addEventListener("error", () => {
+        vidStatus.textContent =
+          "Playback error. Open the src link above — if that 404s, the media Function or R2 key is wrong.";
+      });
+      vid.addEventListener("loadeddata", () => {
+        vidStatus.textContent = "Loaded OK.";
+      });
+    }
+
+    main();
   </script>
 </body>
 </html>
